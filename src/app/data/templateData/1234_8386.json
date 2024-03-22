@@ -1,0 +1,21 @@
+{
+    "Name": "Main Label",
+    "FieldID": 1234,
+    "SystemName": "MAINLABEL",
+    "Type": "String",
+    "DefaultValue": null,
+    "Description": null,
+    "DependsOn": null,
+    "Validations": [],
+    "Required": true,
+    "Score": [],
+    "ShowInHeader": true,
+    "Calculation": null,
+    "DynamicCalculation": null,
+    "DynamicData": null,
+    "FieldValues": [],
+    "FieldOptions": "{\"Summable\":\"No\",\"Root of Parent\":\"No\",\"Conditionally Mandatory\":\"No\",\"Default Sounds Like\":\"Never\",\"Top Level As Root\":\"No\"}",
+    "AdminOnly": false,
+    "ReadOnly": false,
+    "SortOrder": 0
+}

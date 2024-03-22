@@ -1,0 +1,8 @@
+<div>
+    <input
+        [name]="fieldData()?.fieldTemplate!.fieldSystemName"
+        [id]="fieldData()?.fieldInstanceID"
+        [ngModel]="value()"
+        (ngModelChange)="onValueChange($event)"
+    />
+</div>

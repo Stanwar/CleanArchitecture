@@ -1,0 +1,39 @@
+{
+    "Name": [
+        {
+            "Region": null,
+            "Value": "mCase PoC Basic DL"
+        }
+    ],
+    "ListRoles": [
+        {
+            "RoleName": "PoC Only",
+            "CanEdit": true,
+            "CanActivityWall": true,
+            "CanAdd": true,
+            "CanDelete": true,
+            "CanMove": true,
+            "CanMerge": true,
+            "IsListAdmin": false
+        }
+    ],
+    "DocTemplates": [],
+    "SystemName": "mCasePoCBasicDL",
+    "Picture": "",
+    "Description": null,
+    "ShareView": true,
+    "ShareEdit": true,
+    "LocationBased": false,
+    "LegacyID": null,
+    "ListOptions": "{\"Data List Type\":\"Standard\",\"Default View Type\":\"List\",\"Icon Character\":\"{\\\"Upgraded\\\":true,\\\"IconCategory\\\":\\\"Hands%2CShopping%2CSocial\\\",\\\"IconName\\\":\\\"Thumbs Up\\\",\\\"IconColor\\\":\\\"rgb(0,0,0)\\\",\\\"IconID\\\":\\\"fa-light fa-thumbs-up\\\",\\\"BackgroundIconColor\\\":\\\"rgb(255,255,255)\\\"}\"}",
+    "Relationships": [],
+    "Id": 8386,
+    "Workflows": [],
+    "ClientEvents": [],
+    "Infrastructure": false,
+    "DataListCategory": null,
+    "CombinedGridTable": null,
+    "SupervisoryAccess": false,
+    "ShareDraftView": false,
+    "ShareDraftEdit": false
+}
