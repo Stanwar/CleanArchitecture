@@ -5,6 +5,7 @@ import { FieldInstance } from "../models/FieldInstance";
 export class MirrorFieldTemplate extends FieldTemplate {
     mirrorDependencies: FieldTemplate[];
     override readonly: boolean = true;
+    
     constructor(fieldId: number, fieldSystemName: string, fieldLabel: string, datalist: DatalistTemplate, defaultValue: string){
         super(fieldId, fieldSystemName, fieldLabel, datalist, defaultValue);
         this.mirrorDependencies = [];
