@@ -8,7 +8,7 @@ export class FieldTemplate{
     fieldId: number = 0;
     fieldSystemName: string = '';
     fieldLabel: string = '';
-    datalist: DatalistTemplate;
+    datalist!: DatalistTemplate;
     defaultValue: string = '';
     required: boolean = false;
     readonly: boolean = false;
@@ -20,16 +20,18 @@ export class FieldTemplate{
     // Should this have a model transformation function?
     constructor(fieldId: number, 
                 fieldSystemName: string, 
-                fieldLabel: string, 
-                datalist: DatalistTemplate, 
+                fieldLabel: string,
                 defaultValue: string, 
                 ){
         this.fieldId = fieldId;
         this.fieldSystemName = fieldSystemName;
         this.fieldLabel = fieldLabel;
         this.defaultValue = defaultValue;
-        this.datalist = datalist;
         this.visibilityDependency = new FieldDependency();
+    }
+
+    setDatalist(datalist: DatalistTemplate){
+        this.datalist = datalist;
     }
 
     validate(fieldInstance: FieldInstance): boolean {

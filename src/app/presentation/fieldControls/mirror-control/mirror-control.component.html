@@ -2,8 +2,8 @@
     <input
         [name]="fieldData()?.fieldTemplate!.fieldSystemName"
         [id]="fieldData()?.fieldInstanceID"
-        [ngModel]="value()"
+        [ngModel]="fieldData()?.mirrorNewValue()"
         (ngModelChange)="onValueChange($event)"
-        [readOnly]="true"
+        [readOnly]="readonly()"
     />
 </div>

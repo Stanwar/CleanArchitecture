@@ -7,7 +7,7 @@ export class RecordInstance {
     errorMessages: string[] = [];
     // TODO: Reevaluate the need for this property
     hasChildRecords: boolean = false;
-    childRecords: RecordInstance[] = [];
+    private childRecords: number[] = [];
     constructor(recordID: number, fields: FieldInstance[]) {
         this.recordID = recordID;
         this.fields = fields;
@@ -15,5 +15,10 @@ export class RecordInstance {
 
     getFieldInstance(fieldSystemName: string): FieldInstance | undefined {
         return this.fields.find(f => f.fieldTemplate.fieldSystemName === fieldSystemName);
+    }
+    getChildRecords(depth: number): number[] {
+        // Call to store
+        // GetStore().getRecordChildren(this.recordID, depth);
+        return this.childRecords;
     }
 }

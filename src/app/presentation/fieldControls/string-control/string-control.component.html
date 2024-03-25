@@ -2,7 +2,10 @@
     <input
         [name]="fieldData()?.fieldTemplate!.fieldSystemName"
         [id]="fieldData()?.fieldInstanceID"
-        [ngModel]="value()"
+        [ngModel]="fieldData()?.value()"
         (ngModelChange)="onValueChange($event)"
     />
+    <!-- <div *ngIf="fieldData()?.isError()">
+
+    </div> -->
 </div>

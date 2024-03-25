@@ -1,6 +1,6 @@
-import { Component, model, signal } from '@angular/core';
+import { Component, computed, model, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { FieldInstance } from '../../../domain/entities/models/FieldInstance';
+import { MirrorFieldInstance } from '../../../domain/entities/models/FieldModels.ts/MirrorFieldInstance';
 
 @Component({
 	selector: 'app-mirror-control',
@@ -11,12 +11,17 @@ import { FieldInstance } from '../../../domain/entities/models/FieldInstance';
 })
 export class MirrorControlComponent {
 	fieldId: string ='';
-	fieldData = model<FieldInstance>();
-	value = signal<string>('');
+	fieldData = model<MirrorFieldInstance>();
+
+	readonly = computed(() => {
+		return this.fieldData()!.fieldTemplate.readonly;
+	});
 	constructor(){
 	}
 	onValueChange(value: string) {
 		const fieldData = this.fieldData();
-		this.value.set(value);
+		fieldData!.updateValue(value);
+		// Communicate with the presentation control
+		// this.value.set(value);
 	}
 }
