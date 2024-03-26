@@ -16,7 +16,7 @@ export class StringControlComponent extends FieldControl{
 	fieldData = model<StringFieldInstance>();
 	// validators = input<any>();
 	// Update view when values change
-	hidden = computed(() => this.fieldData()?.isHidden());
+	hidden = computed(() => this.fieldData()?.hidden());
 	disabled = computed(() => this.fieldData()?.isDisabled());
 	constructor(mCaseService: mCaseUtilityService){
 		super(mCaseService);

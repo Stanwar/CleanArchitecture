@@ -16,18 +16,19 @@ export class FieldTemplate{
     options: FieldOption[] = [];
     // These are just validations
     validators: IValidator[] = []; 
-    visibilityDependency: FieldDependency;
+    private visibilityDependency: FieldDependency | undefined;
+
+    dependentOnFields: FieldTemplate[] = [];
     // Should this have a model transformation function?
     constructor(fieldId: number, 
                 fieldSystemName: string, 
                 fieldLabel: string,
-                defaultValue: string, 
+                defaultValue: string
                 ){
         this.fieldId = fieldId;
         this.fieldSystemName = fieldSystemName;
         this.fieldLabel = fieldLabel;
         this.defaultValue = defaultValue;
-        this.visibilityDependency = new FieldDependency();
     }
 
     setDatalist(datalist: DatalistTemplate){
@@ -42,15 +43,30 @@ export class FieldTemplate{
         return true;
     }
 
-    getMirrorDependencies(){
-        // To be implemented
-        const mirrorMap = this.datalist.mirrorDependencyMap.get(this.fieldSystemName);
-        return mirrorMap;
+    setVisibilityDependency(dependency: FieldDependency){
+        this.visibilityDependency = dependency;
+        if (this.datalist !== undefined && this.datalist !== null){
+            this.datalist.fields.forEach((field) => {
+                if (dependency.dependencies.some((dep) => dep.dependentFieldID == field.fieldId && dep.dependentOnFieldID == this.fieldId)){
+                    this.dependentOnFields.push(field);
+                }
+            });
+        }
     }
 
-    getDependencies(){
-        // To be implemented
-        const dependencyMap = this.datalist.dependencyMap.get(this.fieldId);
-        return dependencyMap;
+    getVisibilityDependency()
+    {
+        return this.visibilityDependency;
     }
+    // getMirrorDependencies(){
+    //     // To be implemented
+    //     const mirrorMap = this.datalist.mirrorDependencyMap.get(this.fieldSystemName);
+    //     return mirrorMap;
+    // }
+
+    // getDependencies(){
+    //     // To be implemented
+    //     const dependencyMap = this.datalist.dependencyMap.get(this.fieldId);
+    //     return dependencyMap;
+    // }
 }

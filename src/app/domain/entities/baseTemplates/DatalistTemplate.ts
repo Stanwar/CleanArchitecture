@@ -16,11 +16,11 @@ export class DatalistTemplate {
     dependencyMap!: Map<number, Set<number>>;
     // DependentOnField -> List of Fields that are dependent on this field
     mirrorDependencyMap!: Map<string, Set<FieldTemplate>>; // Write custom comparator for FieldTemplate
-    // Creating a new dependency map
+    // Creating a new dependency map // Not necessary
     setupDependencies(){
         this.dependencyMap = new Map<number, Set<number>>();
         this.fields.forEach((field) => {
-            field.visibilityDependency?.dependencies.forEach((fieldDependencyOption) => {
+            field.getVisibilityDependency()?.dependencies.forEach((fieldDependencyOption) => {
 
                 if (this.dependencyMap.has(fieldDependencyOption.dependentOnFieldID)){
                     this.dependencyMap.get(fieldDependencyOption.dependentOnFieldID)?.add(fieldDependencyOption.dependentFieldID);
