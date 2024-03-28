@@ -65,7 +65,7 @@ export class AppComponent {
 		//#region Create field dependency
 		const fieldDependency = new FieldDependency();
 		fieldDependency.allDependenciesMustPass = true;
-		fieldDependency.displayOption = 'Hide';
+		fieldDependency.displayOption = 'Show';
 		//#region Add Field Dependency Option
 		const fieldDependencyOption = new FieldDependencyOption();
 		fieldDependencyOption.dependentFieldID = 2;

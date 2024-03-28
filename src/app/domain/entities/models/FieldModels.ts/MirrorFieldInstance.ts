@@ -44,7 +44,7 @@ export class MirrorFieldInstance extends FieldInstance {
         // Get the field template
         const mirrorFieldTemplate = this.fieldTemplate;
         // Get the mirror dependencies
-        const mirrorDependencies = mirrorFieldTemplate.mirrorDependencies;
+        const mirrorDependencies = mirrorFieldTemplate.regularValueDependencies;
         // Get the record instance
         const recordInstance = record ?? this.recordInstance;
         // Get the record fields
@@ -58,16 +58,5 @@ export class MirrorFieldInstance extends FieldInstance {
                 this.valueDependencies.push(fieldInstance);
             }
         });
-        // Loop through the value dependencies and update mirror template value if dependentOn field's value changes. 
-        // this.valueDependencies.forEach((fieldInstance) => {
-        //     // Add this field instance to the field instance's dependencies
-        //     effect(() => {
-        //         console.log('A dependency has changed');
-        //         const val = fieldInstance.value();
-        //         this.updateValue(val);
-        //     }, {
-        //         allowSignalWrites: true
-        //     });
-        // })
     }
 }

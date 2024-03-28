@@ -9,9 +9,4 @@ export class StringFieldInstance extends FieldInstance {
         super(value, fieldInstanceID, fieldTemplate);
         this.fieldTemplate = fieldTemplate as StringFieldTemplate;
     }
-    
-    isDisabled(): boolean {
-        // Update this via field instance value
-        return true;
-    }
 }
