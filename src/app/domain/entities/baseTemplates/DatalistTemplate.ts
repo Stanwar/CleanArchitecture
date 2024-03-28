@@ -12,11 +12,14 @@ export class DatalistTemplate {
     fields: FieldTemplate [] = [];
     // TODO: Should this be a global store also?
     options!: Map<string, ITemplateOption>;
+    // This will hold references to all fields in the datalist
+    fieldMap!: Map<string, FieldTemplate>;
     // DependentOnField -> List of DependentFields
     dependencyMap!: Map<number, Set<number>>;
     // DependentOnField -> List of Fields that are dependent on this field
     mirrorDependencyMap!: Map<string, Set<FieldTemplate>>; // Write custom comparator for FieldTemplate
-    // Creating a new dependency map // Not necessary
+    // #region Helper Methods. These could be unnecessary
+    // Creating a new dependency map
     setupDependencies(){
         this.dependencyMap = new Map<number, Set<number>>();
         this.fields.forEach((field) => {
@@ -50,4 +53,5 @@ export class DatalistTemplate {
             }
         });
     }
+    // #endregion
 }

@@ -16,7 +16,7 @@ export class MirrorFieldTemplate extends FieldTemplate {
         if (!this.defaultValue || this.defaultValue.length === 0){
             return;
         }
-        // TODO: Add to constants
+        // TODO: Add to constants. Proper token matching
         const matches = this.defaultValue.match(/{\[(.*?)\]}/);
         // If there are matches, find relevant field templates
         if (matches){

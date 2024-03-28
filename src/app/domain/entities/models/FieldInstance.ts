@@ -7,69 +7,42 @@ export class FieldInstance {
     value = signal<string>('');
     fieldInstanceID: number = 0;
     // Reference to the template
-    readonly fieldTemplate: FieldTemplate;    
+    readonly fieldTemplate: FieldTemplate;
     // Reference to the record
     recordInstance!: RecordInstance;
     //#region  List of fields that depend on this field
-    dependencies: FieldInstance[] = [];
+    visibilityDependencyInstances: FieldInstance[] = [];
+    conditionallyMandatoryInstances: FieldInstance[] = [];
+    //#endregion
+    //#region Computed properties
+    conditionallyMandatory = computed(() => {
+        if (this.fieldTemplate.required){
+            return true;
+        }
+        // Check conditionally mandatory validation
+        const returnValue = this.fieldTemplate.checkIfFieldIsConditionallyMandatory(this.getConditionallyMandatoryInstances());
+        return returnValue;
+    });
+
+    // Check if parent is hidden
+    // Then check if all the visibility dependencies are met
+    hidden = computed(() => {
+        const runVisibilityDependencies = this.fieldTemplate.checkIfFieldIsHidden(this.parentFieldInstance(), this.getVisibilityInstances());
+
+        return runVisibilityDependencies;
+    });
+    // Run visibility dependencies
+    disabled = computed(() => {
+        // Should this check parent value too?
+        const returnValue = this.fieldTemplate.checkIfFieldIsDisabled(this.getVisibilityInstances());
+        return returnValue;
+    });
+
+    parentFieldInstance = computed(() => {
+        return this.recordInstance.getFieldByID(this.fieldTemplate.parentFieldID());
+    });
     //#endregion
 
-    hidden = computed(() => {
-        // Update this field instance value
-        let matched = false;
-        this.dependencies?.forEach((fieldInstance) => {
-            const fieldInstanceValue = fieldInstance.value();
-            if (this.fieldTemplate.getVisibilityDependency()?.allDependenciesMustPass){
-                this.fieldTemplate.getVisibilityDependency()?.dependencies.every((fieldDependency) => {
-                    if (fieldDependency.type === 'Equals' && fieldDependency.value === fieldInstanceValue){
-                        matched = true;
-                    }
-                    else {
-                        matched = false;
-                    }
-                });
-            }
-            else {
-                this.fieldTemplate.getVisibilityDependency()?.dependencies.some((fieldDependency) => {
-                    if (fieldDependency.type === 'Equals' && fieldDependency.value === fieldInstanceValue){
-                        matched = true;
-                    }
-                    else {
-                        matched = false;
-                    }
-                });
-            }
-        });
-
-        return matched;
-        if (this.fieldTemplate.getVisibilityDependency()?.allDependenciesMustPass){
-            matched = this.fieldTemplate.getVisibilityDependency()?.dependencies.every((fieldDependency) => {
-                // Convert to map
-                const dependentOnFieldInstance = this.dependencies.find(f => f.fieldTemplate.fieldId === fieldDependency.dependentOnFieldID);
-                if (dependentOnFieldInstance){
-                    if (fieldDependency.type === 'Equals' && fieldDependency.value === dependentOnFieldInstance.value()){
-                        return true;
-                    }
-                    return false;
-                }
-                return false;
-            }) as boolean;
-        }
-        else {
-            matched = this.fieldTemplate.getVisibilityDependency()?.dependencies.some((fieldDependency) => {
-                // Convert to map
-                const dependentOnFieldInstance = this.dependencies.find(f => f.fieldTemplate.fieldId === fieldDependency.dependentOnFieldID);
-                if (dependentOnFieldInstance){
-                    if (fieldDependency.type === 'Equals' && fieldDependency.value === dependentOnFieldInstance.value()){
-                        return true;
-                    }
-                    return false;
-                }
-                return false;
-            }) as boolean;
-        }
-        return matched;
-    });
     //#region ngModel onChange event handler
     updateValue(value: string) {
         // Validate whether the field value is template valid
@@ -90,29 +63,61 @@ export class FieldInstance {
         this.fieldTemplate = fieldTemplate;
     }
     
+    /**
+     * Sets the record instance for this field instance and retrieves the visibility dependency instances.
+     * @param recordInstance The record instance to set.
+     * @returns The updated record instance.
+     */
     setRecordInstance(recordInstance: RecordInstance): RecordInstance {
         this.recordInstance = recordInstance;        
-        this.getVisibilityInstances();
+        // this.getVisibilityInstances();  
+        this.getConditionallyMandatoryInstances();
         return recordInstance;
     }
 
-    getVisibilityInstances(): void {
+    /**
+     * Retrieves the field instances that are dependencies for the visibility of this field instance.
+     * @returns An array of field instances that are dependencies for the visibility of this field instance.
+     */
+    getVisibilityInstances(): FieldInstance[] {
+        if (this.visibilityDependencyInstances.length > 0){
+            return this.visibilityDependencyInstances;
+        }
         // Get the field template
         const fieldTemplate = this.fieldTemplate;
         // Get the dependencies
         const dependencies = fieldTemplate.dependentOnFields;
         // Get the record instance
         const recordInstance = this.recordInstance;
-        // Get the record fields
-        const recordFields = recordInstance.fields;
         // Loop through the dependencies
         dependencies.forEach((dependency) => {
             // Find the field instance
-            const fieldInstance = recordFields.find(f => f.fieldTemplate.fieldSystemName === dependency.fieldSystemName);
+            const fieldInstance = recordInstance.getFieldBySystemName(dependency.fieldSystemName);
             // If the field instance is found, add it to the dependencies
             if (fieldInstance){
-                this.dependencies.push(fieldInstance);
+                this.visibilityDependencyInstances.push(fieldInstance);
             }
         });
+
+        return this.visibilityDependencyInstances;
+    }
+
+    getConditionallyMandatoryInstances(): FieldInstance[] {
+        // Get the field template
+        const fieldTemplate = this.fieldTemplate;
+        // Get the dependencies
+        const conditionalDependencies = fieldTemplate.conditionallyMandatoryOnFields;
+        // Get the record instance
+        const recordInstance = this.recordInstance;
+        // Loop through the dependencies
+        conditionalDependencies.forEach((dependency) => {
+            // Find the field instance
+            const fieldInstance = recordInstance.getFieldBySystemName(dependency.fieldSystemName);
+            // If the field instance is found, add it to the dependencies
+            if (fieldInstance){
+                this.conditionallyMandatoryInstances.push(fieldInstance);
+            }
+        });
+        return this.conditionallyMandatoryInstances;
     }
 }

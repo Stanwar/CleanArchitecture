@@ -1,7 +1,4 @@
-import { DatalistTemplate } from "../baseTemplates/DatalistTemplate";
-import { FieldDependency } from "../baseTemplates/FieldDependency";
 import { FieldTemplate } from "../baseTemplates/FieldTemplate";
-import { FieldInstance } from "../models/FieldInstance";
 import { StringFieldInstance } from "../models/FieldModels.ts/StringFieldInstance";
 
 export class StringFieldTemplate extends FieldTemplate {
@@ -17,10 +14,6 @@ export class StringFieldTemplate extends FieldTemplate {
         let validationStatus = true;
         // Property level validations
         validationStatus = this.runValidations();
-
-        if (validationStatus && fieldInstance.dependencies.length > 0){
-            validationStatus = this.runDependencyLogic(fieldInstance);
-        }
         // Object level validations
         // Custom validations
         return validationStatus;
@@ -36,15 +29,5 @@ export class StringFieldTemplate extends FieldTemplate {
             // }
         }
         return validationStatus;
-    }
-    
-    private runDependencyLogic(fieldInstance: FieldInstance) : boolean{
-        // To be implemented
-        // this.visibilityDependencies.forEach((fieldDependency) => {
-        //     // Logic to update visibility
-        // });
-
-
-        return true;
     }
 }

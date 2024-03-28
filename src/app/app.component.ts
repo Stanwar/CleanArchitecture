@@ -33,7 +33,7 @@ export class AppComponent {
 	// Display data in the view.
 	constructor(){
 		const loadControlClass = new LoadControls();
-		loadControlClass.loadControls(this.fieldData, this.mirrorFieldData);
+		// loadControlClass.loadControls(this.fieldData, this.mirrorFieldData);
 
 		// Problem statement : We need to add visibility dependency between two fields
 		// Field 2 is dependent on Field 1 and will check its value to show/hide itself
@@ -68,10 +68,10 @@ export class AppComponent {
 		fieldDependency.displayOption = 'Hide';
 		//#region Add Field Dependency Option
 		const fieldDependencyOption = new FieldDependencyOption();
-		fieldDependencyOption.dependentFieldID = 1;
-		fieldDependencyOption.dependentOnFieldID = 2;
+		fieldDependencyOption.dependentFieldID = 2;
+		fieldDependencyOption.dependentOnFieldID = 1;
 		fieldDependencyOption.fieldDependencyID = 1;
-		fieldDependencyOption.type = 'Equals';
+		fieldDependencyOption.type = 'Exact';
 		fieldDependencyOption.value = 'Sharad';
 		//#endregion
 		fieldDependency.dependencies.push(fieldDependencyOption);
