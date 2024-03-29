@@ -6,6 +6,7 @@ import { DependencyDisplayOption, FieldDependency } from "./FieldDependency";
 import { FieldOption } from "./FieldOption";
 export class FieldTemplate{
     fieldID: number = 0;
+    fieldType: string = '';
     fieldSystemName: string = '';
     fieldLabel: string = '';
     datalist!: DatalistTemplate;

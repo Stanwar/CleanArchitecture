@@ -1,13 +1,7 @@
 import { FieldTemplate } from "../baseTemplates/FieldTemplate";
 
 export class PhoneFieldTemplate extends FieldTemplate{
-    // Define phone specific properties like validators
-    override validators: any[] = [];
-    constructor(){
-        super();
-        this.validators = [];
-    }
-    override validate(): boolean {
-        return true;
+    constructor(fieldId: number, fieldSystemName: string, fieldLabel: string, defaultValue: string){
+        super(fieldId, fieldSystemName, fieldLabel, defaultValue);
     }
 }

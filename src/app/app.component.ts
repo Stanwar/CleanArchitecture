@@ -13,13 +13,16 @@ import { MirrorFieldTemplate } from './domain/entities/fieldTemplates/MirrorFiel
 import { LoadControls } from './LoadControls';
 import { FieldDependency } from './domain/entities/baseTemplates/FieldDependency';
 import { FieldDependencyOption } from './domain/entities/baseTemplates/FieldDependencyOption';
+import { DateControlComponent } from './presentation/fieldControls/date-control/date-control.component';
+import { DateFieldInstance } from './domain/entities/models/FieldModels.ts/DateFieldInstance';
+import { DateFieldTemplate } from './domain/entities/fieldTemplates/DateFieldTemplate';
 
 @Component({
     selector: 'app-root',
     standalone: true,
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    imports: [RouterOutlet, FormsModule, StringControlComponent, MirrorControlComponent]
+    imports: [RouterOutlet, FormsModule, StringControlComponent, MirrorControlComponent, DateControlComponent]
 })
 export class AppComponent {
 	title = 'cleanArchitecture';
@@ -27,6 +30,7 @@ export class AppComponent {
 	field1Data = model<StringFieldInstance>();
 	mirrorFieldData= model<MirrorFieldInstance>();
 	field2Data = model<StringFieldInstance>();
+	field3Data = model<DateFieldInstance>();
 	// Establish data load
 	// Transform into template configurations
 	// Load record data into instances.
@@ -92,6 +96,20 @@ export class AppComponent {
 		recordInstance.fields.push(stringFieldInstance2);
 		stringFieldInstance.setRecordInstance(recordInstance);
 		stringFieldInstance2.setRecordInstance(recordInstance);
+		//#endregion
+		
+		//#region Add Date Field 
+		const fieldID3 = 1;
+		const fieldSystemName3 = 'sampleDate';
+		const fieldLabel3 = 'Sample Date';
+		const defaultValue3 = '5';
+		const dateFieldTemplate = new DateFieldTemplate(fieldID3, fieldSystemName3, fieldLabel3, defaultValue3);
+		dateFieldTemplate.setDatalist(datalistTemplate);
+		datalistTemplate.fields.push(dateFieldTemplate);
+		const dateFieldInstance = new DateFieldInstance('', 125, dateFieldTemplate);
+		recordInstance.fields.push(dateFieldInstance);
+		dateFieldInstance.setRecordInstance(recordInstance);
+		this.field3Data.set(dateFieldInstance);
 		//#endregion
 	}
 }

@@ -1,5 +1,7 @@
 <div [hidden]="fieldData()?.hidden()">
-    <label>{{fieldData()?.fieldTemplate?.fieldLabel}}</label>
+    <label [for]="fieldData()?.fieldTemplate?.fieldSystemName">
+        {{fieldData()?.fieldTemplate?.fieldLabel}} 
+    </label>
     <input
         [name]="fieldData()?.fieldTemplate!.fieldSystemName"
         [id]="fieldData()?.fieldInstanceID"

@@ -4,7 +4,7 @@ import { RecordInstance } from "./RecordInstance";
 
 export class FieldInstance {
     // Field instance value will be updated by the ngModel
-    value = signal<string>('');
+    value = signal<any>('');
     fieldInstanceID: number = 0;
     // Reference to the template
     readonly fieldTemplate: FieldTemplate;
@@ -58,11 +58,14 @@ export class FieldInstance {
 
     //#endregion
     constructor(value: string, fieldInstanceID: number, fieldTemplate: FieldTemplate) {
-        this.value = signal(value);
         this.fieldInstanceID = fieldInstanceID;
         this.fieldTemplate = fieldTemplate;
+        this.applyDefaultValueIfNeeded(value);
     }
     
+    applyDefaultValueIfNeeded(value: String) {
+        this.value = value ? signal(value) : signal(this.fieldTemplate.defaultValue);
+    }
     /**
      * Sets the record instance for this field instance and retrieves the visibility dependency instances.
      * @param recordInstance The record instance to set.
