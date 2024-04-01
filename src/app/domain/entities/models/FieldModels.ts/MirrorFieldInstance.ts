@@ -2,6 +2,7 @@ import { effect, computed, signal } from "@angular/core";
 import { MirrorFieldTemplate } from "../../fieldTemplates/MirrorFieldTemplate";
 import { FieldInstance } from "../FieldInstance";
 import { RecordInstance } from "../RecordInstance";
+import { mCaseUtilityService } from "../../../../services/MCaseUtilityService";
 
 export class MirrorFieldInstance extends FieldInstance {
     override fieldTemplate: MirrorFieldTemplate;
@@ -31,8 +32,8 @@ export class MirrorFieldInstance extends FieldInstance {
         this.value.set(value);
     }
 
-    constructor(value: string, fieldInstanceID: number, fieldTemplate: MirrorFieldTemplate) {
-        super(value, fieldInstanceID, fieldTemplate);
+    constructor(mCaseService: mCaseUtilityService, value: string, fieldInstanceID: number, fieldTemplate: MirrorFieldTemplate) {
+        super(mCaseService, value, fieldInstanceID, fieldTemplate);
         this.fieldTemplate = fieldTemplate;
     }
 

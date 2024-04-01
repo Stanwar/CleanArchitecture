@@ -3,7 +3,8 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { routes } from './app.routes';
 import { FormsModule } from '@angular/forms';
 import { StringControlComponent } from './presentation/fieldControls/string-control/string-control.component';
-import { AppComponent } from './app.component';
+import { PipesModule } from './core/pipes/pipes.module';
+
 @NgModule({
     declarations: [
     ],
@@ -12,6 +13,7 @@ import { AppComponent } from './app.component';
         FormsModule, 
         StringControlComponent,
         RouterModule.forRoot(routes),
+        PipesModule
     ],
     bootstrap: [],
     providers: []

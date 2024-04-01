@@ -2,11 +2,12 @@ import { signal } from "@angular/core";
 import { FieldTemplate } from "../../baseTemplates/FieldTemplate";
 import { DynamicDropdownFieldTemplate } from "../../fieldTemplates/DynamicDropdownFieldTemplate";
 import { FieldInstance } from "../FieldInstance";
+import { mCaseUtilityService } from "../../../../services/MCaseUtilityService";
 
 export class DynamicDropdownFieldInstance extends FieldInstance {
     override fieldTemplate: DynamicDropdownFieldTemplate;
-    constructor(value: string, fieldInstanceID: number, fieldTemplate: DynamicDropdownFieldTemplate) {
-        super(value, fieldInstanceID, fieldTemplate);
+    constructor(mCaseService: mCaseUtilityService, value: string, fieldInstanceID: number, fieldTemplate: DynamicDropdownFieldTemplate) {
+        super(mCaseService, value, fieldInstanceID, fieldTemplate);
         this.fieldTemplate = fieldTemplate as DynamicDropdownFieldTemplate;
         this.applyDefaultValueIfNeeded(value);
     }

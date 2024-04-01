@@ -15,4 +15,9 @@ export class mCaseUtilityService
 
         return guid;
     }
+
+    generateID(): number {  
+        // Generate a new ID
+        return Math.floor(Math.random() * 1000);
+    }
 }

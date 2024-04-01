@@ -4,7 +4,9 @@ import { FieldInstance } from "../models/FieldInstance";
 import { DatalistTemplate } from "./DatalistTemplate";
 import { DependencyDisplayOption, FieldDependency } from "./FieldDependency";
 import { FieldOption } from "./FieldOption";
-export class FieldTemplate{
+import { IFieldValidator } from "../interfaces/IFieldValidator";
+import { ValidationResponse } from "../interfaces/ValidationResponse";
+export class FieldTemplate implements IFieldValidator{
     fieldID: number = 0;
     fieldType: string = '';
     fieldSystemName: string = '';
@@ -19,6 +21,8 @@ export class FieldTemplate{
     options: FieldOption[] = [];
     // These are just validations
     validators: IValidator[] = []; 
+    validationResponses: ValidationResponse[];
+
     private visibilityDependency: FieldDependency | undefined;
     private conditionalDependency: FieldDependency | undefined;
     dependentOnFields: FieldTemplate[] = [];
@@ -33,8 +37,10 @@ export class FieldTemplate{
         this.fieldSystemName = fieldSystemName;
         this.fieldLabel = fieldLabel;
         this.defaultValue = defaultValue;
+        this.validationResponses = [];
     }
 
+    //#region Private Methods
     private setParentFieldID(){
         // TODO: Figure out this weird circular hell
         // This should auto set. Only available in ESNext lib for Typescript
@@ -49,16 +55,39 @@ export class FieldTemplate{
         // this.parentFieldID.set(parentField.fieldID);
     }
 
-    setDatalist(datalist: DatalistTemplate){
-        this.datalist = datalist;
+    private runDependencyCheck(dependentFieldInstances: FieldInstance[]): boolean {
+        const visibilityDependencyConfig = this.getVisibilityDependency()!;
+        // Check if all dependencies are met
+        const allDependenciesMustPass = visibilityDependencyConfig.allDependenciesMustPass;
+
+        const visibleDependencyConfigurations = visibilityDependencyConfig.dependencies;
+        
+        let matchedValues = Array<boolean>();
+        // Check if all dependencies are met
+        dependentFieldInstances.forEach((fieldInstance) => {
+            const fieldInstanceValue = fieldInstance.value();
+            // Get dependency option 
+            const applicableDependency = visibleDependencyConfigurations.find((dependency) => dependency.dependentOnFieldID === fieldInstance.fieldTemplate.fieldID && dependency.dependentFieldID === this.fieldID);
+            // Run validation
+            const isDependencyValid = applicableDependency! && applicableDependency.isValid(fieldInstanceValue);
+            matchedValues.push(isDependencyValid);
+        });
+
+        if (allDependenciesMustPass){
+            return matchedValues.every((value) => value);
+        }
+        else {
+            return matchedValues.some((value) => value);
+        }
+    }
+    //#endregion
+    
+    getValidators(): IValidator[] {
+        return this.validators;
     }
 
-    validate(fieldInstance: FieldInstance): boolean {
-        if (!(fieldInstance.fieldTemplate instanceof FieldTemplate)){
-            console.debug('FieldTemplate.validate: fieldInstance.fieldTemplate is not a FieldTemplate');
-            return false;
-        }
-        return true;
+    setDatalist(datalist: DatalistTemplate){
+        this.datalist = datalist;
     }
 
     setVisibilityDependency(dependency: FieldDependency){
@@ -122,30 +151,31 @@ export class FieldTemplate{
 
         return parentInstance.hidden();
     }
+    //#region Implementing IFieldValidator
+    validate(fieldInstance: FieldInstance): ValidationResponse[] {
+        if (!(fieldInstance.fieldTemplate instanceof FieldTemplate)){
+            console.debug('FieldTemplate.validate: fieldInstance.fieldTemplate is not a FieldTemplate');
+            this.validationResponses.push(new ValidationResponse(false, 'FieldTemplate.validate: fieldInstance.fieldTemplate is not a FieldTemplate'));
+        }
 
-    private runDependencyCheck(dependentFieldInstances: FieldInstance[]): boolean {
-        const visibilityDependencyConfig = this.getVisibilityDependency()!;
-        // Check if all dependencies are met
-        const allDependenciesMustPass = visibilityDependencyConfig.allDependenciesMustPass;
-
-        const visibleDependencyConfigurations = visibilityDependencyConfig.dependencies;
-        
-        let matchedValues = Array<boolean>();
-        // Check if all dependencies are met
-        dependentFieldInstances.forEach((fieldInstance) => {
-            const fieldInstanceValue = fieldInstance.value();
-            // Get dependency option 
-            const applicableDependency = visibleDependencyConfigurations.find((dependency) => dependency.dependentOnFieldID === fieldInstance.fieldTemplate.fieldID && dependency.dependentFieldID === this.fieldID);
-            // Run validation
-            const isDependencyValid = applicableDependency! && applicableDependency.isValid(fieldInstanceValue);
-            matchedValues.push(isDependencyValid);
+        // Run all validators
+        this.validators?.forEach((validator) => {
+            const validationResponse = validator.validate(fieldInstance);
+            this.validationResponses.push(validationResponse);
         });
-
-        if (allDependenciesMustPass){
-            return matchedValues.every((value) => value);
-        }
-        else {
-            return matchedValues.some((value) => value);
-        }
+        return this.validationResponses;
     }
+
+    setValidationResponse(validationResponse: ValidationResponse): void {
+        this.validationResponses.push(validationResponse);
+    }
+    
+    getValidationResponses(): ValidationResponse[] {
+        return this.validationResponses;
+    }
+
+    clearValidationResponses(): void {
+        this.validationResponses = [];
+    }
+    //#endregion
 }

@@ -1,16 +1,18 @@
 import { computed, signal } from "@angular/core";
 import { FieldInstance } from "./FieldInstance";
+import { mCaseUtilityService } from "../../../services/MCaseUtilityService";
 // This holds all the field instances for a record.
 export class RecordInstance {
     recordID: number = 0;
     parentRecordID: number = 0;
     fields: FieldInstance[] = [];
-    totalFields = computed(() => this.fields.length);
     isValid: boolean = true;
     errorMessages: string[] = [];
     // TODO: Reevaluate the need for this property
     hasChildRecords: boolean = false;
-    // private fieldNameToFieldIDMapper: Map<string, number> = new Map<string, number>();
+    datalistTemplateID: number = 0;
+    //#region Computed properties
+    totalFields = computed(() => this.fields.length);
     fieldNameToFieldIDMapper = computed(()=> { 
         const returnValue = new Map<string, number>();
         this.fields.forEach(f => {
@@ -27,9 +29,10 @@ export class RecordInstance {
         });
         return returnValue;
     });
+    //#endregion
     private childRecords: number[] = [];
-    constructor(recordID: number, fields: FieldInstance[]) {
-        this.recordID = recordID;
+    constructor(mCaseService: mCaseUtilityService, recordID: number = 0, fields: FieldInstance[]) {
+        this.recordID = recordID > 0 ? recordID : mCaseService.generateID();
         this.fields = fields;
     }
 

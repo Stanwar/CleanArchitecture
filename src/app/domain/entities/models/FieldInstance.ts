@@ -1,6 +1,7 @@
 import { computed, signal } from "@angular/core";
 import { FieldTemplate } from "../baseTemplates/FieldTemplate";
 import { RecordInstance } from "./RecordInstance";
+import { mCaseUtilityService } from "../../../services/MCaseUtilityService";
 
 export class FieldInstance {
     // Field instance value will be updated by the ngModel
@@ -57,8 +58,8 @@ export class FieldInstance {
     }
 
     //#endregion
-    constructor(value: string, fieldInstanceID: number, fieldTemplate: FieldTemplate) {
-        this.fieldInstanceID = fieldInstanceID;
+    constructor(mCaseService: mCaseUtilityService, value: string, fieldInstanceID: number = 0, fieldTemplate: FieldTemplate) {
+        this.fieldInstanceID = fieldInstanceID > 0 ? fieldInstanceID : mCaseService.generateID();
         this.fieldTemplate = fieldTemplate;
         this.applyDefaultValueIfNeeded(value);
     }

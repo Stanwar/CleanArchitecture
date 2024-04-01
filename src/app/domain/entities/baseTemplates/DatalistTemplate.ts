@@ -21,6 +21,11 @@ export class DatalistTemplate {
         });
         return fieldMap;   
     });
+    constructor(datalistID: number, name: string, systemName: string){
+        this.datalistID = datalistID;
+        this.name = name;
+        this.systemName = systemName;    
+    }
     // DependentOnField -> List of DependentFields
     // dependencyMap!: Map<number, Set<number>>;
     // // DependentOnField -> List of Fields that are dependent on this field

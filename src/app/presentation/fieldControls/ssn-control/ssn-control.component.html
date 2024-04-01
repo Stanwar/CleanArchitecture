@@ -1,17 +1,14 @@
 <div [hidden]="fieldData()?.hidden()">
-    <div>
-       <label [for]="fieldData()?.fieldTemplate?.fieldSystemName">
-          {{fieldData()?.fieldTemplate?.fieldLabel}} 
-       </label>
-    </div>
-    <div>
-       <input
-       type="date"
-       [name]="fieldData()?.fieldTemplate!.fieldSystemName"
-       [id]="fieldData()?.fieldInstanceID"
-       [ngModel]="fieldData()?.value()"
-       (ngModelChange)="onValueChange($event)"
-       />
-       {{fieldData()?.value()}}
-    </div>
- </div>
+	<div>
+		<label [for]="fieldData()?.fieldTemplate?.fieldSystemName">
+			{{fieldData()?.fieldTemplate?.fieldLabel}}
+		</label>
+	</div>
+	<div>
+		<input
+			[name]="fieldData()?.fieldTemplate!.fieldSystemName" 
+			[id]="fieldData()?.fieldInstanceID"
+			[ngModel]="fieldData()?.value() | customSSN" 
+			(ngModelChange)="onValueChange($event)" />
+	</div>
+</div>

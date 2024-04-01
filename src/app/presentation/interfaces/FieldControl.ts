@@ -10,4 +10,6 @@ export abstract class FieldControl {
     constructor(mCaseService: mCaseUtilityService) {
         this.fieldControlID = mCaseService.generateGuid();
     }
+
+    abstract onValueChange(value: string): void;
 }
